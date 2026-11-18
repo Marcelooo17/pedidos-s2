@@ -1,7 +1,9 @@
 import express from "express";
+import { medirLatencia, resumenMetricas } from "./metricas";
 
 const app = express();
 app.use(express.json());
+app.use(medirLatencia);
 
 app.get("/health", (_req, res) => {
   res.json({ estado: "ok" });
@@ -14,6 +16,10 @@ app.get("/reporte/bloqueante", (_req, res) => {
     // ocupa el único hilo de Node
   }
   res.json({ reporte: "listo" });
+});
+
+app.get("/metricas", (_req, res) => {
+  res.json(resumenMetricas());
 });
 
 app.listen(3000, () => console.log("Pedidos escuchando en :3000"));
